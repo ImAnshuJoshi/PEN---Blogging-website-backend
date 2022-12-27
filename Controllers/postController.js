@@ -19,69 +19,95 @@ export const getBlog = async (req, res, next) => {
 };
 export const getfilteredBlog = async (req, res, next) => {
   try {
-    console.log(req.query);
-    // const { keywords, category, id } = req.query;
-    console.log(db.blog);
-    const blogs = await db.blog.filter((user) => {
+    let Allblogs = await db.blog.findAll({ where: {} });
+    let textSearchedblogs;
+    if (req.query.textSearch) {
+      textSearchedblogs = Allblogs.filter((blog) => {
+        return (
+          blog.title
+            .toLowerCase()
+            .includes(req.query.textSearch.toLowerCase()) ||
+          blog.content
+            .toLowerCase()
+            .includes(req.query.textSearch.toLowerCase()) ||
+          blog.keywords
+            .toLowerCase()
+            .includes(req.query.textSearch.toLowerCase()) ||
+          blog.category
+            .toLowerCase()
+            .includes(req.query.textSearch.toLowerCase())
+        );
+      });
+    }
+    let filteredblogs = textSearchedblogs.filter((user) => {
       let isValid = true;
-      for (key in filters) {
-        console.log(key, user[key], filters[key]);
-        isValid = isValid && user[key] == filters[key];
+      for (var key in req.query) {
+        if (key == "limit" || key == "textSearch") {
+          continue;
+        }
+        isValid = isValid && user[key] == req.query[key];
       }
       return isValid;
     });
-
-    //filter and sort by likes, comments, createdAt
-    // const blogs = await db.blog.findAll({});
-    console.log(blogs);
-    res.status(200).json(
-      blogs.sort((a, b) => {
-        b.likes - a.likes;
-        if (b.likes - a.likes == 0) {
-          b.comments - a.comments;
-          if (b.comments - a.comments == 0) {
-            b.createdAt - a.createdAt;
-          }
+    let paginatedBlogs;
+    if (req.query.limit) {
+      paginatedBlogs = filteredblogs.slice(0, req.query.limit);
+    } else {
+      paginatedBlogs = filteredblogs;
+    }
+    let sortedBlogs = paginatedBlogs.sort((a, b) => {
+      if (b.likes - a.likes == 0) {
+        if (b.comments - a.comments == 0) {
+          return b.createdAt - a.createdAt;
         }
-      })
-    );
-    res.status(200).send(blogs);
+        return b.comments - a.comments;
+      }
+      return b.likes - a.likes;
+    });
+    res.status(200).json(sortedBlogs);
   } catch (e) {
-    // blogs = blogs.sort((a, b) => {
-    //   a.likes - b.likes;
-    //   if (a.likes - b.likes == 0) {
-    //     a.comments - b.comments;
-    //     if (a.comments - b.comments) {
-    //       a.createedAt - b.createedAt;
-    //     }
-    //   }
-    // });
-    // res.status(200).json(
-    //   blogs.sort((a, b) => {
-    //     b.likes - a.likes;
-    //     if (b.likes - a.likes == 0) {
-    //       b.comments - a.comments;
-    //       if (b.comments - a.comments == 0) {
-    //         b.createdAt - a.createdAt;
-    //       }
-    //     }
-    //   })
-    // );
-    //   console.log(db.blog);
-    //   const filters = req.query;
-    //   const filteredBlogs = db.blog.filter((blog) => {
-    //     let isValid = true;
-    //     for (key in filters) {
-    //       console.log(key, blog.key, filters.key);
-    //       isValid = isValid && blog.key == filters.key;
-    //     }
-    //     return isValid;
-    //   });
-    //   console.log(filteredBlogs);
-    //   res.send(filteredBlogs);
     console.log(e);
-    res.status(400).json(e);
+    res.status(500).json({
+      error: "Database error occurred!",
+    });
   }
+  // try {
+  // console.log(req.query);
+  // const blogs = await db.blog.findAll({ where: {} });
+  // console.log(blogs);
+  // if (!blogs) {
+  //   res.status(400).json({
+  //     error: "No blogs Found",
+  //   });
+  // }
+  // console.log(blogs);
+  // const filteredblogs = blogs.filter((user) => {
+  //   let isValid = true;
+  //   for (key in filters) {
+  //     console.log(key, user[key], filters[key]);
+  //     isValid = isValid && user[key] == filters[key];
+  //   }
+  //   return isValid;
+  // });
+
+  // //filter and sort by likes, comments, createdAt
+  // console.log(filteredblogs);
+  // res.status(200).json(
+  //   blogs.sort((a, b) => {
+  //     b.likes - a.likes;
+  //     if (b.likes - a.likes == 0) {
+  //       b.comments - a.comments;
+  //       if (b.comments - a.comments == 0) {
+  //         b.createdAt - a.createdAt;
+  //       }
+  //     }
+  //   })
+  // );
+  // res.status(200).send(blogs);
+  // } catch (e) {
+  //   console.log(e);
+  //   res.status(400).json(e);
+  // }
 };
 export const createBlog = async (req, res, next) => {
   try {

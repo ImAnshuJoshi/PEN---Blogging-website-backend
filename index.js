@@ -21,10 +21,6 @@ app.use("/api/posts", blogRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/like", likeRoute);
 app.use("/api/unlike", unlikeRoute);
-// app.use("/", (req, res) => {
-//   res.json("Hello World");
-// });
-
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
   Connection;
