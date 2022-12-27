@@ -52,16 +52,6 @@ export const deleteComment = async (req, res, next) => {
   try {
     const comment = await db.comment.findByPk(req.params.id);
     await comment.destroy();
-    const commentblog = await db.blog.update(
-      {
-        comments: db.blog.comments - 1,
-      },
-      {
-        where: {
-          id: bid,
-        },
-      }
-    );
     res.status(200).json({ message: "comment deleted" });
   } catch (err) {
     next(err);
