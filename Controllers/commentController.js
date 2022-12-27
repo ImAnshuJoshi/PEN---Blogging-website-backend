@@ -54,7 +54,7 @@ export const deleteComment = async (req, res, next) => {
     await comment.destroy();
     const commentblog = await db.blog.update(
       {
-        comments: blog.comments - 1,
+        comments: db.blog.comments - 1,
       },
       {
         where: {
