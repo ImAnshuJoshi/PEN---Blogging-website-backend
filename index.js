@@ -16,6 +16,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+app.use("/", (req, res) => {
+  res.json("Hello World");
+});
 app.use("/api/", authRoute);
 app.use("/api/posts", blogRoute);
 app.use("/api/comments", commentRoute);
