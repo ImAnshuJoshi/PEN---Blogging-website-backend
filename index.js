@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import Connection from "./models/Connection.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import authRoute from "./Routes/AuthRoute.js";
+import authRoute from "./Routes/authRoute.js";
 import blogRoute from "./Routes/blogRoute.js";
 import commentRoute from "./Routes/commentRoute.js";
 import likeRoute from "./Routes/likeRoute.js";
