@@ -22,6 +22,9 @@ app.use("/api/posts", blogRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/like", likeRoute);
 app.use("/api/unlike", unlikeRoute);
+app.get("/", (req, res) => {
+  res.send("The server is up and running...");
+});
 app.use("*", (req, res) => {
   res.status(404).json({ message: "Page not found" });
 });
