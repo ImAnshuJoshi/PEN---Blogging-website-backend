@@ -19,6 +19,6 @@ export const likeBlog = async (req, res, next) => {
     console.log(blog);
     res.status(200).send("upblog");
   } catch (err) {
-    res.status(200).json(err);
+    next(err);
   }
 };

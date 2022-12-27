@@ -8,6 +8,7 @@ import blogRoute from "./Routes/blogRoute.js";
 import commentRoute from "./Routes/commentRoute.js";
 import likeRoute from "./Routes/likeRoute.js";
 import unlikeRoute from "./Routes/unlikeRoute.js";
+import { errorHandler } from "./Middlewares/errorHandler.js";
 
 dotenv.config();
 const app = express();
@@ -21,6 +22,11 @@ app.use("/api/posts", blogRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/like", likeRoute);
 app.use("/api/unlike", unlikeRoute);
+app.use("*", (req, res) => {
+  res.status(404).json({ message: "Page not found" });
+});
+app.use(errorHandler);
+
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
   Connection;

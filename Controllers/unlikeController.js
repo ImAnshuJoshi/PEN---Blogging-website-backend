@@ -19,6 +19,6 @@ export const unlikeBlog = async (req, res, next) => {
     console.log(blog);
     res.status(200).send("Downblog");
   } catch (err) {
-    res.status(200).json(err);
+    next(err);
   }
 };

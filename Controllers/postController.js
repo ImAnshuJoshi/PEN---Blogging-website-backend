@@ -13,8 +13,7 @@ export const getBlog = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.log(e);
-    res.send(400).json(e);
+    next(e);
   }
 };
 export const getfilteredBlog = async (req, res, next) => {
@@ -66,48 +65,8 @@ export const getfilteredBlog = async (req, res, next) => {
     });
     res.status(200).json(sortedBlogs);
   } catch (e) {
-    console.log(e);
-    res.status(500).json({
-      error: "Database error occurred!",
-    });
+    next(e);
   }
-  // try {
-  // console.log(req.query);
-  // const blogs = await db.blog.findAll({ where: {} });
-  // console.log(blogs);
-  // if (!blogs) {
-  //   res.status(400).json({
-  //     error: "No blogs Found",
-  //   });
-  // }
-  // console.log(blogs);
-  // const filteredblogs = blogs.filter((user) => {
-  //   let isValid = true;
-  //   for (key in filters) {
-  //     console.log(key, user[key], filters[key]);
-  //     isValid = isValid && user[key] == filters[key];
-  //   }
-  //   return isValid;
-  // });
-
-  // //filter and sort by likes, comments, createdAt
-  // console.log(filteredblogs);
-  // res.status(200).json(
-  //   blogs.sort((a, b) => {
-  //     b.likes - a.likes;
-  //     if (b.likes - a.likes == 0) {
-  //       b.comments - a.comments;
-  //       if (b.comments - a.comments == 0) {
-  //         b.createdAt - a.createdAt;
-  //       }
-  //     }
-  //   })
-  // );
-  // res.status(200).send(blogs);
-  // } catch (e) {
-  //   console.log(e);
-  //   res.status(400).json(e);
-  // }
 };
 export const createBlog = async (req, res, next) => {
   try {
@@ -139,13 +98,11 @@ export const createBlog = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.log(e);
     next(e);
   }
 };
 export const updateBlog = async (req, res, err) => {
   try {
-    // let {title,content,keywords}=req.body;
     const updatedBlog = await db.blog.update(
       {
         title: req.body.title,
@@ -167,7 +124,6 @@ export const deleteBlog = async (req, res, err) => {
     });
     res.status(200).json({ deletedBlog, message: "Blog has been deleted!" });
   } catch (err) {
-    console.log(err);
-    res.status(400).json(err);
+    next(err);
   }
 };

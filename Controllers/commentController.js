@@ -28,7 +28,7 @@ export const createComment = async (req, res, next) => {
     await comment.setCommenter(user);
     res.status(200).json({ comment: comment });
   } catch (err) {
-    res.status(200).json(err);
+    next(err);
   }
 };
 export const getcomment = async (req, res, next) => {
@@ -36,7 +36,7 @@ export const getcomment = async (req, res, next) => {
     const comment = await db.comment.findByPk(req.params.id);
     res.status(200).json({ comment: comment });
   } catch (err) {
-    res.status(200).json(err);
+    next(err);
   }
 };
 export const updatecomment = async (req, res, next) => {
@@ -45,7 +45,7 @@ export const updatecomment = async (req, res, next) => {
     await comment.update({ content: req.body.content });
     res.status(200).json({ comment: comment });
   } catch (err) {
-    res.status(200).json(err);
+    next(err);
   }
 };
 export const deleteComment = async (req, res, next) => {
@@ -64,6 +64,6 @@ export const deleteComment = async (req, res, next) => {
     );
     res.status(200).json({ message: "comment deleted" });
   } catch (err) {
-    res.status(200).json(err);
+    next(err);
   }
 };
