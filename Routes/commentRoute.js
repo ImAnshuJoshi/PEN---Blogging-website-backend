@@ -5,7 +5,7 @@ import {
   getcomment,
   updatecomment,
   deleteComment,
-} from "../Controllers/commentcontroller.js";
+} from "../Controllers/commentController.js";
 import auth from "../Middlewares/tokenauth.js";
 
 const router = express.Router();
