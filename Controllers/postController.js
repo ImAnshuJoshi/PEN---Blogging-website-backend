@@ -20,22 +20,19 @@ export const getBlog = async (req, res, next) => {
 export const getfilteredBlog = async (req, res, next) => {
   try {
     console.log(req.query);
-    const { keywords, category, id } = req.query;
-    // keywords
-    // const blogs = await db.blog.filter((user) => {
-    //   let isValid = true;
-    //   for (key in filters) {
-    //     console.log(key, user[key], filters[key]);
-    //     isValid = isValid && user[key] == filters[key];
-    //   }
-    //   return isValid;
-    // });
-    // res.send(blogs);
+    // const { keywords, category, id } = req.query;
+    console.log(db.blog);
+    const blogs = await db.blog.filter((user) => {
+      let isValid = true;
+      for (key in filters) {
+        console.log(key, user[key], filters[key]);
+        isValid = isValid && user[key] == filters[key];
+      }
+      return isValid;
+    });
 
     //filter and sort by likes, comments, createdAt
-    const blogs = await db.blog.findAll({
-      
-    });
+    // const blogs = await db.blog.findAll({});
     console.log(blogs);
     res.status(200).json(
       blogs.sort((a, b) => {
@@ -48,6 +45,7 @@ export const getfilteredBlog = async (req, res, next) => {
         }
       })
     );
+    res.status(200).send(blogs);
   } catch (e) {
     // blogs = blogs.sort((a, b) => {
     //   a.likes - b.likes;
@@ -82,7 +80,7 @@ export const getfilteredBlog = async (req, res, next) => {
     //   console.log(filteredBlogs);
     //   res.send(filteredBlogs);
     console.log(e);
-    res.send(400).json(e);
+    res.status(400).json(e);
   }
 };
 export const createBlog = async (req, res, next) => {
