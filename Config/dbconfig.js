@@ -1,7 +1,6 @@
 import User from "../models/User.js";
 import Blog from "../models/Blog.js";
 import Comment from "../models/Comment.js";
-import { Cat, Tag } from "../models/Category.js";
 import sequelize from "../models/Connection.js";
 
 User.hasMany(Blog, { as: "Post" });
@@ -24,16 +23,20 @@ Blog.belongsToMany(User, {
   through: "Likes",
 });
 
-Cat.belongsToMany(Blog, { 
-  as: "Category" ,
-  foreignKey: "cat_id",
-  through:"cat_blog"
+User.belongsToMany(Blog, {
+  as: "commentedBlog",
+  foreignKey: "user_id",
+  through: "Comments",
+}); 
+Blog.belongsToMany(User, {
+  as: "Commenter",
+  foreignKey: "blog_id",
+  through: "Comments",
 });
-Blog.belongsTo(Cat, { as: "Blog" });
 
 sequelize
   .sync({ alter: true })
   .then(() => console.log("schemas updated and resynced"));
 
-const db = { user: User, blog: Blog, comment: Comment, cat: Cat, tag: Tag };
+const db = { user: User, blog: Blog, comment: Comment };
 export default db;

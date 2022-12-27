@@ -18,6 +18,14 @@ const Blog = sequelize.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    comments: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    category: {
+      type: DataTypes.STRING,
+      defaultValue: "General",
+    },
     keywords: {
       type: DataTypes.STRING,
       defaultValue: "",
